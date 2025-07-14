@@ -31,6 +31,54 @@ db.serialize(() => {
       UNIQUE(recipe_id)
     )
   `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS likes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      recipe_id TEXT NOT NULL,
+      FOREIGN KEY(user_id) REFERENCES users(id)
+    )
+  `);
+
+
+
+  // Drop and recreate comments table to ensure proper schema
+  db.run(`DROP TABLE IF EXISTS comments`);
+  
+  db.run(`
+    CREATE TABLE comments (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      recipe_id TEXT NOT NULL,
+      content TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 5),
+      FOREIGN KEY(user_id) REFERENCES users(id)
+    )
+  `);
+
+
+
+db.run(`
+  CREATE TABLE IF NOT EXISTS tags (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT UNIQUE NOT NULL
+  )
+`);
+
+db.run(`
+  CREATE TABLE IF NOT EXISTS recipe_tags (
+    recipe_id TEXT NOT NULL,
+    tag_id INTEGER NOT NULL,
+    FOREIGN KEY(recipe_id) REFERENCES recipes(recipe_id),
+    FOREIGN KEY(tag_id) REFERENCES tags(id),
+    UNIQUE(recipe_id, tag_id)
+  )
+    
+`);
+
+  
 });
 
 module.exports = db;

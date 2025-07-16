@@ -4,6 +4,7 @@ const authRoutes = require('./routes/auth');
 const favoritesRoutes = require('./routes/favorites');
 const likesRoutes = require('./routes/likes');
 const commentsRoutes = require('./routes/comments');
+const leaderboardRoutes = require('./routes/leaderboard');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/favorites', favoritesRoutes);
 app.use('/api/likes', likesRoutes);
 app.use('/api/comments', commentsRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
 
 app.listen(3001, () => {
   console.log('Server running on port 3001');
